@@ -1,10 +1,10 @@
 const express = require('express');
+const checkListRouter = require('./src/routes/checklist');
 
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('<h1>Lista de tarefas</h1>');
-});
+app.use('/checklists', checkListRouter)
 
 app.listen(3000, () => {
     console.log('servidor rodando na porta 3000');
