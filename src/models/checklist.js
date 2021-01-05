@@ -6,6 +6,6 @@ const checkistSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Task'
     }]
-})
+});
 
 module.exports = mongoose.model('Checklist', checkistSchema);

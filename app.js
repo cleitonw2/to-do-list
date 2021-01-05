@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const checkListRouter = require('./src/routes/checklist');
+const taskRouter = require('./src/routes/task');
 const rootRouter = require('./src/routes');
 const methodOverride = require('method-override');
 
@@ -17,7 +18,7 @@ app.use(methodOverride('_method',{ methods: ['POST', 'GET']}));
 app.use('/', rootRouter)
 
 app.use('/checklists', checkListRouter)
-
+app.use('/checklists', taskRouter.checklistDependent)
 
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');

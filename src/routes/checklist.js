@@ -18,7 +18,7 @@ router.get('/new', async (req, res) => {
         let checklist = new Checklist();
         res.status(200).render('checklists/new', { checklist: checklist });
     } catch (error) {
-        res.status(500).render('pages/error', { errors: 'Erro ao carregara o formulário' });
+        res.status(500).render('pages/error', { error: 'Erro ao carregara o formulário' });
     }
 })
 
@@ -45,10 +45,10 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        let checklist = await Checklist.findById(req.params.id)
+        let checklist = await Checklist.findById(req.params.id).populate('tasks');
         res.status(200).render('checklists/show', { checklist: checklist });
     } catch (error) {
-        res.status(422).render('pages/error', { error: 'Erro ao exibir a tarefa' });
+        res.status(422).render('pages/error', { error: 'Erro ao exibir as listas de tarefas' });
     }
 });
 
@@ -73,4 +73,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router
+module.exports = router;
