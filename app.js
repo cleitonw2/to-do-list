@@ -15,10 +15,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method',{ methods: ['POST', 'GET']}));
 
-app.use('/', rootRouter)
+app.use('/', rootRouter);
 
-app.use('/checklists', checkListRouter)
-app.use('/checklists', taskRouter.checklistDependent)
+app.use('/checklists', checkListRouter);
+app.use('/checklists', taskRouter.checklistDependent);
+app.use('/tasks', taskRouter.simple);
 
 app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'ejs');

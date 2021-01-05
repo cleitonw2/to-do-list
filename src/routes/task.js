@@ -1,6 +1,8 @@
 const express = require('express');
+const { findById } = require('../models/checklist');
 
 const checklistDependentRouter = express.Router();
+const simpleRouter = express.Router();
 
 const Checklist = require('../models/checklist');
 const Task = require('../models/task');
@@ -11,6 +13,19 @@ checklistDependentRouter.get('/:id/tasks/new', async (req, res) => {
         res.status(200).render('tasks/new', { checklistId: req.params.id, task: task });
     } catch (error) {
         res.status(422).render('pages/error', { error: 'Erro ao carregar o formulário' });
+    }
+});
+
+simpleRouter.delete('/:id', async (req, res) => {
+    try {
+        let task = await Task.findByIdAndDelete(req.params.id);
+        let checklist = await Checklist.findById(task.checklist);
+        let taskToRemove = checklist.tasks.indexOf(task._id);
+        checklist.tasks.slice(taskToRemove, 1);
+        checklist.save();
+        res.redirect(`/checklists/${checklist._id}`);
+    } catch (error) {
+        res.status(422).render('pages/error', { error: 'Erro ao excluir uma tarefa' });
     }
 });
 
@@ -29,4 +44,7 @@ checklistDependentRouter.post('/:id/tasks', async (req, res) => {
     }
 });
 
-module.exports = { checklistDependent: checklistDependentRouter };
+module.exports = { 
+    checklistDependent: checklistDependentRouter,
+    simple: simpleRouter
+};
