@@ -1,5 +1,5 @@
 const express = require('express');
-const { findById } = require('../models/checklist');
+//const { findById } = require('../models/checklist');
 
 const checklistDependentRouter = express.Router();
 const simpleRouter = express.Router();
@@ -44,7 +44,19 @@ checklistDependentRouter.post('/:id/tasks', async (req, res) => {
     }
 });
 
-module.exports = { 
+simpleRouter.put('/:id', async (req, res) => {
+    let task = await Task.findById(req.params.id);
+    try {
+        task.set(req.body.task);
+        await task.save();
+        res.status(200).json({ task });
+    } catch (error) {
+        let errors = error.errors;
+        res.status(422).json({ task: { ...errors } });
+    }
+});
+
+module.exports = {
     checklistDependent: checklistDependentRouter,
     simple: simpleRouter
 };
